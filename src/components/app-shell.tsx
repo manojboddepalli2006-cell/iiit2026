@@ -89,7 +89,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </button>
           <div className="grid size-9 place-items-center rounded-full bg-brand-gradient text-xs font-semibold text-primary-foreground">MB</div>
         </header>
-        <main className="mx-auto w-full max-w-7xl flex-1 p-4 md:p-8">{children}</main>
+        <main className="mx-auto w-full min-w-0 max-w-7xl flex-1 p-4 md:p-8">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
