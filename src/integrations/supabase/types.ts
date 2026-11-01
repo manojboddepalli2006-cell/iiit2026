@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      analyses: {
+        Row: {
+          confidence: number
+          created_at: string
+          ecr: number
+          execution_ms: number
+          expected_loss: number
+          id: string
+          model: string
+          portfolio_id: string | null
+          portfolio_name: string
+          samples: number
+          seed: number
+          summary: Json
+          var: number
+        }
+        Insert: {
+          confidence: number
+          created_at?: string
+          ecr: number
+          execution_ms: number
+          expected_loss: number
+          id?: string
+          model: string
+          portfolio_id?: string | null
+          portfolio_name: string
+          samples: number
+          seed: number
+          summary: Json
+          var: number
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          ecr?: number
+          execution_ms?: number
+          expected_loss?: number
+          id?: string
+          model?: string
+          portfolio_id?: string | null
+          portfolio_name?: string
+          samples?: number
+          seed?: number
+          summary?: Json
+          var?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analyses_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assets: {
         Row: {
           asset_code: string
