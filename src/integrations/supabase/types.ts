@@ -179,6 +179,63 @@ export type Database = {
           },
         ]
       }
+      quantum_runs: {
+        Row: {
+          confidence: number
+          created_at: string
+          depth: number
+          ecr_units: number
+          eval_qubits: number
+          execution_ms: number
+          gate_count: number
+          id: string
+          model: string
+          n_assets: number
+          problem_label: string
+          qubits: number
+          result: Json
+          shots: number
+          unit: number
+          var_units: number
+        }
+        Insert: {
+          confidence: number
+          created_at?: string
+          depth: number
+          ecr_units: number
+          eval_qubits: number
+          execution_ms: number
+          gate_count: number
+          id?: string
+          model: string
+          n_assets: number
+          problem_label: string
+          qubits: number
+          result: Json
+          shots: number
+          unit: number
+          var_units: number
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          depth?: number
+          ecr_units?: number
+          eval_qubits?: number
+          execution_ms?: number
+          gate_count?: number
+          id?: string
+          model?: string
+          n_assets?: number
+          problem_label?: string
+          qubits?: number
+          result?: Json
+          shots?: number
+          unit?: number
+          var_units?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
