@@ -21,8 +21,8 @@ import { money, pct } from "@/lib/format";
 
 export const Route = createFileRoute("/dashboard")({
   validateSearch: (s: Record<string, unknown>) => ({
-    q: typeof s.q === "string" ? s.q : undefined,
-    project: typeof s.project === "string" ? s.project : undefined,
+    q: typeof s["q"] === "string" ? (s["q"] as string) : undefined,
+    project: typeof s["project"] === "string" ? (s["project"] as string) : undefined,
   }),
   head: () => ({
     meta: [
@@ -237,7 +237,8 @@ function AssetDialog({ open, asset, existingCodes, onClose, onSave }: {
   open: boolean; asset: Asset | null; existingCodes: string[]; onClose: () => void; onSave: (a: AssetInput) => Promise<void>;
 }) {
   const blank = { asset_code: "", borrower_name: "", exposure: "", pd: "", lgd: "", rho: "", status: "Active" };
-  const [form, setForm] = useState<Record<string, string>>(blank);
+  type Form = typeof blank;
+  const [form, setForm] = useState<Form>(blank);
   const [errors, setErrors] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [lastKey, setLastKey] = useState<string | null>(null);
@@ -245,7 +246,7 @@ function AssetDialog({ open, asset, existingCodes, onClose, onSave }: {
   if (key !== lastKey) {
     setLastKey(key);
     setErrors([]);
-    setForm(asset ? Object.fromEntries(Object.entries(asset).map(([k, v]) => [k, String(v)])) : blank);
+    setForm(asset ? { asset_code: asset.asset_code, borrower_name: asset.borrower_name, exposure: String(asset.exposure), pd: String(asset.pd), lgd: String(asset.lgd), rho: String(asset.rho), status: asset.status } : blank);
   }
 
   const submit = async () => {
@@ -262,10 +263,10 @@ function AssetDialog({ open, asset, existingCodes, onClose, onSave }: {
     try { await onSave(input); } catch (e) { setErrors([(e as Error).message]); } finally { setSaving(false); }
   };
 
-  const field = (k: string, label: string, type = "text", step?: string) => (
+  const field = (k: keyof Form, label: string, type = "text", step?: string) => (
     <div className="space-y-1.5">
       <Label htmlFor={k}>{label}</Label>
-      <Input id={k} type={type} step={step} value={form[k] ?? ""} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
+      <Input id={k} type={type} {...(step ? { step } : {})} value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
     </div>
   );
 

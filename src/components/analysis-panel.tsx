@@ -22,8 +22,8 @@ export function AnalysisPanel({
   portfolios: { id: string; name: string }[];
   portfolioId: string;
   onPortfolioChange: (id: string) => void;
-  initial?: Partial<AnalysisConfig>;
-  onComplete?: (r: StoredAnalysis) => void;
+  initial?: Partial<AnalysisConfig> | undefined;
+  onComplete?: ((r: StoredAnalysis) => void) | undefined;
 }) {
   const qc = useQueryClient();
   const [cfg, setCfg] = useState<AnalysisConfig>({ model: "gaussian", confidence: 0.99, samples: 20000, algorithm: "classical", ...initial });

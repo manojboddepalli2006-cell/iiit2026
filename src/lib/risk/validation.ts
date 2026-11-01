@@ -26,20 +26,20 @@ export function findDuplicateCodes(codes: string[]): string[] {
   return [...dup];
 }
 
-export interface CsvRowResult { row: number; asset?: AssetInput; errors: string[] }
+export interface CsvRowResult { row: number; asset?: AssetInput | undefined; errors: string[] }
 
 export const CSV_HEADERS = ["asset_id", "borrower_name", "exposure", "pd", "lgd", "rho", "status"];
 
 export function parseAssetCsv(text: string, existingCodes: string[] = []): CsvRowResult[] {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   if (!lines.length) return [{ row: 0, errors: ["File is empty"] }];
-  const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
+  const header = lines[0]!.split(",").map((h) => h.trim().toLowerCase());
   const missing = CSV_HEADERS.filter((h) => h !== "status" && !header.includes(h));
   if (missing.length) return [{ row: 1, errors: [`Missing columns: ${missing.join(", ")}`] }];
   const taken = new Set(existingCodes.map((c) => c.toUpperCase()));
   const results: CsvRowResult[] = [];
   for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(",").map((c) => c.trim());
+    const cells = lines[i]!.split(",").map((c) => c.trim());
     const get = (h: string) => cells[header.indexOf(h)] ?? "";
     const asset: AssetInput = {
       asset_code: get("asset_id"),

@@ -31,7 +31,7 @@ describe("validation", () => {
   it("CSV rejects duplicate asset IDs", () => {
     const csv = "asset_id,borrower_name,exposure,pd,lgd,rho\nA1,X,100,0.1,0.5,0.1\nA1,Y,100,0.1,0.5,0.1";
     const r = parseAssetCsv(csv);
-    expect(r[0].errors).toHaveLength(0);
-    expect(r[1].errors[0]).toMatch(/already exists/);
+    expect(r[0]!.errors).toHaveLength(0);
+    expect(r[1]!.errors[0]).toMatch(/already exists/);
   });
 });
