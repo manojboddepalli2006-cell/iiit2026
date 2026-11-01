@@ -14,7 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assets: {
+        Row: {
+          asset_code: string
+          borrower_name: string
+          created_at: string
+          exposure: number
+          id: string
+          lgd: number
+          pd: number
+          portfolio_id: string
+          rho: number
+          status: string
+        }
+        Insert: {
+          asset_code: string
+          borrower_name: string
+          created_at?: string
+          exposure: number
+          id?: string
+          lgd: number
+          pd: number
+          portfolio_id: string
+          rho: number
+          status?: string
+        }
+        Update: {
+          asset_code?: string
+          borrower_name?: string
+          created_at?: string
+          exposure?: number
+          id?: string
+          lgd?: number
+          pd?: number
+          portfolio_id?: string
+          rho?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assets_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolios: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          config: Json
+          created_at: string
+          description: string | null
+          id: string
+          last_result: Json | null
+          last_status: string
+          name: string
+          portfolio_id: string | null
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_result?: Json | null
+          last_status?: string
+          name: string
+          portfolio_id?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_result?: Json | null
+          last_status?: string
+          name?: string
+          portfolio_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
