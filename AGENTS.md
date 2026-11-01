@@ -12,5 +12,6 @@
 ## Architecture
 - Risk math lives in `src/lib/risk/` as pure functions (no React/DB) so it stays unit-testable; UI must never hardcode KPI values.
 - Data access goes through `src/services/*` using the browser database client; Stage 1 is a shared demo workspace with open RLS (no login) — add auth before real data.
-- Quantum features (U, S, C, QAE) are labelled planned/pending until actually implemented; never present classical results as quantum.
+- Quantum engine lives in `src/lib/quantum/` (gate IR, own exact statevector simulator, U/S/C oracle, canonical QAE, VaR bisection) because Python/Qiskit cannot run in this stack; label it as the in-browser statevector simulator, never as Qiskit Aer, CUDA-Q or hardware, and never fill quantum outputs with classical numbers.
+- Quantum jobs run in a Web Worker (`src/lib/quantum/worker.ts`) so long simulations never block the UI; saved runs omit QASM (regenerable).
 - Monte Carlo runs in the browser (`src/lib/risk/monte-carlo.ts`, chunked with one seeded RNG stream) instead of a Python/FastAPI service, because the stack is TanStack Start on edge workers. Only aggregated histogram/CDF summaries are saved to history; raw scenario losses stay in memory for CSV export.

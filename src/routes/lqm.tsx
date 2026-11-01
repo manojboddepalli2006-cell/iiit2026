@@ -16,8 +16,8 @@ export const Route = createFileRoute("/lqm")({
 const items = [
   { t: "Expected Loss", f: "EL = Σ Exposure_k × PD_k × LGD_k", d: "The average loss over the horizon. Computed analytically for every asset and summed.", s: "Implemented" },
   { t: "Loss distribution", f: "L = Σ λ_k · 1{default_k},  λ_k = Exposure_k × LGD_k", d: "Defaults are either independent, or conditionally independent given a shared factor Z with p_k(z) = Φ((Φ⁻¹(p_k) − √ρ_k z)/√(1−ρ_k)).", s: "Implemented (classical MC)" },
-  { t: "Value at Risk", f: "VaR_α = inf{ x : P[L ≤ x] ≥ α }", d: "The loss threshold not exceeded with confidence α (95%, 99%, 99.9%). Estimated from Monte Carlo samples; QAE estimation is planned.", s: "Classical only" },
-  { t: "Economic Capital", f: "ECR_α = VaR_α − EL", d: "Capital a bank holds to absorb unexpected losses beyond the expected level.", s: "Classical only" },
+  { t: "Value at Risk", f: "VaR_α = inf{ x : P[L ≤ x] ≥ α }", d: "The loss threshold not exceeded with confidence α (95%, 99%, 99.9%). Estimated from Monte Carlo samples (Dashboard) and by QAE with bisection on the statevector simulator (Quantum Workspace).", s: "Classical + QAE (simulator)" },
+  { t: "Economic Capital", f: "ECR_α = VaR_α − EL", d: "Capital a bank holds to absorb unexpected losses beyond the expected level.", s: "Classical + QAE (simulator)" },
 ];
 
 function LQM() {
