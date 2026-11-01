@@ -23,7 +23,7 @@ export const CircuitDiagram = forwardRef<SVGSVGElement, { n: number; gates: Gate
       for (const g of shown) {
         const qs = [g.target, ...g.controls];
         const lo = Math.min(...qs), hi = Math.max(...qs);
-        let col = 0; for (let q = lo; q <= hi; q++) col = Math.max(col, busy[q]!);
+        let col = stageStart; for (let q = lo; q <= hi; q++) col = Math.max(col, busy[q]!);
         if (g.stage !== lastStage) { col = Math.max(col, width); if (lastStage) bands.push({ stage: lastStage, from: stageStart, to: col }); lastStage = g.stage; stageStart = col; }
         for (let q = lo; q <= hi; q++) busy[q] = col + 1;
         cols.push(col); width = Math.max(width, col + 1);
@@ -42,7 +42,7 @@ export const CircuitDiagram = forwardRef<SVGSVGElement, { n: number; gates: Gate
         {layout.bands.map((b, i) => (
           <g key={i}>
             <rect x={left + b.from * W} y={4} width={(b.to - b.from) * W} height={svgH - 8} fill={STAGE_FILL[b.stage]} opacity={0.07} />
-            {STAGE_NAME[b.stage] && (b.to - b.from) * W > 40 && <text x={left + b.from * W + 4} y={16} fill="var(--color-foreground, #333)" fontWeight={600}>{STAGE_NAME[b.stage]}</text>}
+            {STAGE_NAME[b.stage] && (b.to - b.from) * W > 110 && <text x={left + b.from * W + 4} y={16} fill="var(--color-foreground, #333)" fontWeight={600}>{STAGE_NAME[b.stage]}</text>}
           </g>
         ))}
         {Array.from({ length: n }, (_, q) => {

@@ -58,7 +58,7 @@ function QCircuits() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <PageHeader title="Q-Circuits" subtitle="Circuits generated from the current quantum configuration (Egger et al., 2019)"
         actions={<StatusPill tone="ok">Generated · statevector simulator</StatusPill>} />
 
@@ -75,7 +75,7 @@ function QCircuits() {
       </div>
 
       {data && (
-        <Panel>
+        <Panel className="min-w-0 overflow-hidden">
           <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 className="text-lg font-semibold">Oracle A = C·S·U</h2>
@@ -95,7 +95,7 @@ function QCircuits() {
       )}
 
       {data && (
-        <Panel>
+        <Panel className="min-w-0 overflow-hidden">
           <h2 className="text-lg font-semibold">Full QAE circuit</h2>
           <p className="mb-3 text-xs text-muted-foreground">
             {data.qm.qubits} qubits (registers: {data.qae.circuit.regs.map((r) => `${r.label} ${r.size}`).join(" · ")}) · depth {data.qm.depth.toLocaleString()} · {data.qm.gates.toLocaleString()} gates ·
