@@ -1,4 +1,4 @@
-import { Area, Bar, CartesianGrid, ComposedChart, Line, LineChart, ReferenceArea, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Line, LineChart, ReferenceArea, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { AnalysisSummary } from "@/lib/risk/monte-carlo";
 import { compactMoney, money } from "@/lib/format";
 
@@ -39,7 +39,6 @@ export function LossCdf({ a }: { a: AnalysisSummary }) {
           <XAxis dataKey="loss" type="number" domain={["dataMin", "dataMax"]} tickFormatter={(v) => compactMoney(v)} {...axis} />
           <YAxis domain={[0, 1]} tickFormatter={(v) => `${Math.round(v * 100)}%`} {...axis} />
           <Tooltip formatter={(v) => [`${(Number(v) * 100).toFixed(2)}%`, "P(L ≤ x)"]} labelFormatter={(l) => `Loss ${money(Number(l))}`} />
-          <Area dataKey="p" />
           <Line dataKey="p" type="stepAfter" dot={false} stroke="var(--color-primary-deep)" strokeWidth={2} isAnimationActive={false} />
           <ReferenceLine y={a.confidence} stroke="var(--color-muted-foreground)" strokeDasharray="4 4"
             label={{ value: `α = ${(a.confidence * 100).toFixed(1)}%`, position: "insideBottomRight", fontSize: 11 }} />
