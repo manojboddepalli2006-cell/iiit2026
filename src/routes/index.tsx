@@ -7,6 +7,9 @@ import { Panel, StatusPill } from "@/components/app-shell";
 import { ANALYSIS_KEY, type StoredAnalysis } from "@/components/analysis-panel";
 import { assetsQuery, portfoliosQuery } from "@/services/portfolio";
 import { analysesQuery } from "@/services/analyses";
+import { QuantumKpis } from "@/components/quantum/quantum-panels";
+import { useLatestQuantum } from "@/components/quantum/use-quantum";
+import type { QuantumRunResult } from "@/lib/quantum/workspace";
 import { portfolioEL, totalExposure } from "@/lib/risk/engine";
 import { compactMoney, pct } from "@/lib/format";
 import chip from "@/assets/quantum-chip.jpg";
@@ -32,6 +35,7 @@ function Index() {
   const exp = totalExposure(list);
   const el = portfolioEL(list);
   const history = useQuery(analysesQuery);
+  const quantum = useLatestQuantum() as QuantumRunResult | undefined;
   const a = analysis.data?.portfolioId === pid ? analysis.data : history.data?.find((h) => h.portfolioId === pid);
   const stamp = a ? ` · ${a.samples.toLocaleString()} samples · ${new Date(a.createdAt).toLocaleString()}` : "";
   const loading = portfolios.isLoading || assets.isLoading;
@@ -47,7 +51,7 @@ function Index() {
     <div className="space-y-6">
       <section className="grid items-center gap-6 overflow-hidden rounded-3xl border bg-hero p-6 shadow-soft md:grid-cols-2 md:p-10">
         <div>
-          <StatusPill tone="pending">Stage 2 · Classical Monte Carlo engine</StatusPill>
+          <StatusPill tone="pending">Stage 3 · Quantum amplitude estimation (simulator)</StatusPill>
           <h1 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">Quantum-Enhanced Credit Risk Analysis</h1>
           <p className="mt-4 max-w-lg text-muted-foreground">
             Analyze portfolio credit risk using classical Monte Carlo simulation and quantum amplitude estimation.
@@ -80,6 +84,11 @@ function Index() {
           </Panel>
         ))}
       </div>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Quantum results</h2>
+        <StatusPill tone="ok">{quantum ? `Statevector simulator · ${quantum.job.problem.label}` : "Simulator ready · no run yet"}</StatusPill>
+      </div>
+      <QuantumKpis r={quantum} />
     </div>
   );
 }
