@@ -64,8 +64,8 @@ function Compare() {
       <PageHeader title="Classical vs Quantum" subtitle="One Run Analysis workflow · exact reference, Monte Carlo and QAE on the same problem"
         actions={<StatusPill tone="ok">QUANTUM SIMULATOR — in-browser statevector</StatusPill>} />
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,420px)_1fr]">
-        <Panel>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+        <Panel className="min-w-0">
           <h2 className="mb-4 text-lg font-semibold">Run Analysis</h2>
           <div className="mb-4 grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
@@ -87,7 +87,7 @@ function Compare() {
               </Select>
             </div>
           </div>
-          <QuantumSetupForm setup={setup} onChange={setSetup} />
+          <div className="min-w-0 overflow-x-auto"><QuantumSetupForm setup={setup} onChange={setSetup} /></div>
           <div className="mt-5 flex gap-2">
             <Button size="lg" className="flex-1 rounded-xl bg-brand-gradient shadow-lift" onClick={start} disabled={running}>
               {running ? <Loader2 className="animate-spin" /> : <Play />} Run Analysis
@@ -195,7 +195,7 @@ function Results({ r, portfolioRun }: { r: ComparisonResult; portfolioRun: Param
         <p className="mt-4 text-xs text-muted-foreground">Times are measured on this computer; the quantum time is a classical statevector simulation and says nothing about quantum speed-up. Oracle calls versus samples are counts, not runtimes.</p>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Chart t="1 · Portfolio loss distribution" d="Exact P(L = x) bars, Monte Carlo line, VaR, tail region and E[L]."><DistributionChart r={r} /></Chart>
         <Chart t="2 · Cumulative distribution" d="Exact and Monte Carlo CDFs; red points are only the thresholds where QAE was run."><CdfCompareChart r={r} /></Chart>
         <Chart t="3 · QAE convergence" d="Estimate at the VaR threshold versus evaluation qubits."><ConvergenceChart r={r} /></Chart>
