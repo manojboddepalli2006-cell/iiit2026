@@ -2,15 +2,16 @@ import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Asset, AssetInput } from "@/lib/risk/types";
 
-const toAsset = (r: Record<string, unknown>): Asset => ({
-  id: r.id as string,
-  asset_code: r.asset_code as string,
-  borrower_name: r.borrower_name as string,
+type Row = { id: string; asset_code: string; borrower_name: string; exposure: number; pd: number; lgd: number; rho: number; status: string };
+const toAsset = (r: Row): Asset => ({
+  id: r.id,
+  asset_code: r.asset_code,
+  borrower_name: r.borrower_name,
   exposure: Number(r.exposure),
   pd: Number(r.pd),
   lgd: Number(r.lgd),
   rho: Number(r.rho),
-  status: r.status as string,
+  status: r.status,
 });
 
 export const portfoliosQuery = queryOptions({

@@ -33,10 +33,10 @@ function Projects() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", description: "", portfolio_id: "" });
 
-  const save = async () => {
+  const save = async (): Promise<void> => {
     const pid = form.portfolio_id || portfolios.data?.[0]?.id;
-    if (!form.name.trim()) return toast.error("Project name is required");
-    if (!pid) return toast.error("Select a portfolio");
+    if (!form.name.trim()) { toast.error("Project name is required"); return; }
+    if (!pid) { toast.error("Select a portfolio"); return; }
     try {
       await createProject({ name: form.name.trim(), description: form.description, portfolio_id: pid, config: { model: "gaussian", confidence: 0.99, samples: 20000, algorithm: "classical" } });
       toast.success("Project created");
@@ -86,7 +86,7 @@ function Projects() {
             <div className="space-y-1.5"><Label htmlFor="pdesc">Description</Label><Textarea id="pdesc" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             <div className="space-y-1.5">
               <Label>Portfolio</Label>
-              <Select value={form.portfolio_id || portfolios.data?.[0]?.id} onValueChange={(v) => setForm({ ...form, portfolio_id: v })}>
+              <Select value={form.portfolio_id || portfolios.data?.[0]?.id || ""} onValueChange={(v) => setForm({ ...form, portfolio_id: v })}>
                 <SelectTrigger><SelectValue placeholder="Select portfolio" /></SelectTrigger>
                 <SelectContent>{portfolios.data?.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}</SelectContent>
               </Select>

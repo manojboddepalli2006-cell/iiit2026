@@ -20,9 +20,9 @@ import { ASSET_STATUSES, type AnalysisConfig, type Asset, type AssetInput } from
 import { money, pct } from "@/lib/format";
 
 export const Route = createFileRoute("/dashboard")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    q: typeof s["q"] === "string" ? (s["q"] as string) : undefined,
-    project: typeof s["project"] === "string" ? (s["project"] as string) : undefined,
+  validateSearch: (s: Record<string, unknown>): { q?: string; project?: string } => ({
+    ...(typeof s["q"] === "string" ? { q: s["q"] } : {}),
+    ...(typeof s["project"] === "string" ? { project: s["project"] } : {}),
   }),
   head: () => ({
     meta: [
