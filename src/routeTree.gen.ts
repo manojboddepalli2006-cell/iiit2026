@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CudaqRouteImport } from './routes/cudaq'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as LqmRouteImport } from './routes/lqm'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as QCircuitsRouteImport } from './routes/q-circuits'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CudaqRoute = CudaqRouteImport.update({
+  id: '/cudaq',
+  path: '/cudaq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LqmRoute = LqmRouteImport.update({
+  id: '/lqm',
+  path: '/lqm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QCircuitsRoute = QCircuitsRouteImport.update({
+  id: '/q-circuits',
+  path: '/q-circuits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cudaq': typeof CudaqRoute
+  '/dashboard': typeof DashboardRoute
+  '/lqm': typeof LqmRoute
+  '/projects': typeof ProjectsRoute
+  '/q-circuits': typeof QCircuitsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cudaq': typeof CudaqRoute
+  '/dashboard': typeof DashboardRoute
+  '/lqm': typeof LqmRoute
+  '/projects': typeof ProjectsRoute
+  '/q-circuits': typeof QCircuitsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cudaq': typeof CudaqRoute
+  '/dashboard': typeof DashboardRoute
+  '/lqm': typeof LqmRoute
+  '/projects': typeof ProjectsRoute
+  '/q-circuits': typeof QCircuitsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/cudaq' | '/dashboard' | '/lqm' | '/projects' | '/q-circuits'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cudaq' | '/dashboard' | '/lqm' | '/projects' | '/q-circuits'
+  id:
+    | '__root__'
+    | '/'
+    | '/cudaq'
+    | '/dashboard'
+    | '/lqm'
+    | '/projects'
+    | '/q-circuits'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CudaqRoute: typeof CudaqRoute
+  DashboardRoute: typeof DashboardRoute
+  LqmRoute: typeof LqmRoute
+  ProjectsRoute: typeof ProjectsRoute
+  QCircuitsRoute: typeof QCircuitsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cudaq': {
+      id: '/cudaq'
+      path: '/cudaq'
+      fullPath: '/cudaq'
+      preLoaderRoute: typeof CudaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lqm': {
+      id: '/lqm'
+      path: '/lqm'
+      fullPath: '/lqm'
+      preLoaderRoute: typeof LqmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/q-circuits': {
+      id: '/q-circuits'
+      path: '/q-circuits'
+      fullPath: '/q-circuits'
+      preLoaderRoute: typeof QCircuitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CudaqRoute: CudaqRoute,
+  DashboardRoute: DashboardRoute,
+  LqmRoute: LqmRoute,
+  ProjectsRoute: ProjectsRoute,
+  QCircuitsRoute: QCircuitsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
