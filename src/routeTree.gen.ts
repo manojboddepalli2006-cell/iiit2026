@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CudaqRouteImport } from './routes/cudaq'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as LqmRouteImport } from './routes/lqm'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as QCircuitsRouteImport } from './routes/q-circuits'
@@ -29,6 +30,11 @@ const CudaqRoute = CudaqRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LqmRoute = LqmRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
@@ -75,14 +84,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/cudaq' | '/dashboard' | '/lqm' | '/projects' | '/q-circuits'
+    | '/'
+    | '/cudaq'
+    | '/dashboard'
+    | '/history'
+    | '/lqm'
+    | '/projects'
+    | '/q-circuits'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cudaq' | '/dashboard' | '/lqm' | '/projects' | '/q-circuits'
+  to:
+    | '/'
+    | '/cudaq'
+    | '/dashboard'
+    | '/history'
+    | '/lqm'
+    | '/projects'
+    | '/q-circuits'
   id:
     | '__root__'
     | '/'
     | '/cudaq'
     | '/dashboard'
+    | '/history'
     | '/lqm'
     | '/projects'
     | '/q-circuits'
@@ -92,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CudaqRoute: typeof CudaqRoute
   DashboardRoute: typeof DashboardRoute
+  HistoryRoute: typeof HistoryRoute
   LqmRoute: typeof LqmRoute
   ProjectsRoute: typeof ProjectsRoute
   QCircuitsRoute: typeof QCircuitsRoute
@@ -118,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lqm': {
@@ -148,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CudaqRoute: CudaqRoute,
   DashboardRoute: DashboardRoute,
+  HistoryRoute: HistoryRoute,
   LqmRoute: LqmRoute,
   ProjectsRoute: ProjectsRoute,
   QCircuitsRoute: QCircuitsRoute,
