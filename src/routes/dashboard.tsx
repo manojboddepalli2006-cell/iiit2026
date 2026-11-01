@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { PageHeader, Panel, StatusPill } from "@/components/app-shell";
 import { AnalysisPanel } from "@/components/analysis-panel";
+import { RiskKpiStrip } from "@/components/risk-kpis";
 import { assetsQuery, createAssets, deleteAsset, portfoliosQuery, updateAsset } from "@/services/portfolio";
 import { projectsQuery, saveProjectResult } from "@/services/projects";
 import { assetEL } from "@/lib/risk/engine";
@@ -73,6 +74,8 @@ function Dashboard() {
   const initialCfg = useMemo(() => (project?.config ?? undefined) as Partial<AnalysisConfig> | undefined, [project]);
 
   const onCsv = async (file: File) => {
+    if (file.size > 2 * 1024 * 1024) { toast.error("CSV must be 2 MB or smaller"); return; }
+    if (!/\.csv$/i.test(file.name)) { toast.error("Please choose a .csv file"); return; }
     const text = await file.text();
     const res = parseAssetCsv(text, list.map((a) => a.asset_code));
     setCsvReport(res);
@@ -117,6 +120,8 @@ function Dashboard() {
           </div>
         }
       />
+
+      <RiskKpiStrip />
 
       {pid && portfolios.data && (
         <AnalysisPanel
