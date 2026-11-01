@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Bell, Cpu, FolderKanban, History, Home, LayoutDashboard, Search, Sigma, Workflow } from "lucide-react";
+import { Bell, Cpu, GitCompareArrows, FolderKanban, History, Home, LayoutDashboard, Search, Sigma, Workflow } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset,
@@ -17,6 +17,7 @@ const nav = [
   { title: "CudaQ", url: "/cudaq", icon: Cpu },
   { title: "Q-Circuits", url: "/q-circuits", icon: Workflow },
   { title: "LQM", url: "/lqm", icon: Sigma },
+  { title: "Compare", url: "/compare", icon: GitCompareArrows },
 ] as const;
 
 function AppSidebar() {

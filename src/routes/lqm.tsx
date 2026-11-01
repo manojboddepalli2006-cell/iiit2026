@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader, Panel, StatusPill } from "@/components/app-shell";
+import { RiskKpiStrip } from "@/components/risk-kpis";
+import { LossCdf, LossHistogram } from "@/components/risk-charts";
+import { analysesQuery } from "@/services/analyses";
 
 export const Route = createFileRoute("/lqm")({
   head: () => ({
@@ -8,6 +12,8 @@ export const Route = createFileRoute("/lqm")({
       { name: "description", content: "Expected loss, loss distribution, Value at Risk and economic capital explained." },
       { property: "og:title", content: "Loss Quantification Model — Q-CreditX" },
       { property: "og:description", content: "How Q-CreditX quantifies portfolio credit loss." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: LQM,
@@ -21,6 +27,7 @@ const items = [
 ];
 
 function LQM() {
+  const latest = useQuery(analysesQuery).data?.[0];
   return (
     <div className="space-y-6">
       <PageHeader title="Loss Quantification Model" subtitle="The risk measures computed by Q-CreditX" />
@@ -33,7 +40,14 @@ function LQM() {
           </Panel>
         ))}
       </div>
-      <Panel className="text-sm text-muted-foreground">Quantum amplitude estimation of the CDF, VaR and ECR is <b className="text-foreground">pending</b> (Stage 3). No quantum speedup is claimed in this prototype.</Panel>
+      <RiskKpiStrip />
+      {latest ? (
+        <div className="grid gap-5 lg:grid-cols-2">
+          <Panel><h3 className="mb-2 font-semibold">Loss distribution · {latest.portfolioName}</h3><LossHistogram a={latest} /></Panel>
+          <Panel><h3 className="mb-2 font-semibold">Cumulative distribution</h3><LossCdf a={latest} /></Panel>
+        </div>
+      ) : <Panel className="text-sm text-muted-foreground">Run an analysis on the Dashboard to see the live loss distribution here.</Panel>}
+      <Panel className="text-sm text-muted-foreground">Quantum CDF, VaR and ECR come from QAE on the in-browser statevector simulator (see Compare). Expected Loss is always computed classically. No quantum speed-up is claimed.</Panel>
     </div>
   );
 }

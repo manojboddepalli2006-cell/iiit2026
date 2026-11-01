@@ -117,6 +117,48 @@ export type Database = {
           },
         ]
       }
+      comparisons: {
+        Row: {
+          classical_var: number | null
+          confidence: number
+          created_at: string
+          exact_var: number | null
+          id: string
+          mode: string
+          portfolio_id: string | null
+          problem_label: string
+          quantum_var: number | null
+          result: Json
+          unit: number
+        }
+        Insert: {
+          classical_var?: number | null
+          confidence: number
+          created_at?: string
+          exact_var?: number | null
+          id?: string
+          mode?: string
+          portfolio_id?: string | null
+          problem_label: string
+          quantum_var?: number | null
+          result: Json
+          unit?: number
+        }
+        Update: {
+          classical_var?: number | null
+          confidence?: number
+          created_at?: string
+          exact_var?: number | null
+          id?: string
+          mode?: string
+          portfolio_id?: string | null
+          problem_label?: string
+          quantum_var?: number | null
+          result?: Json
+          unit?: number
+        }
+        Relationships: []
+      }
       portfolios: {
         Row: {
           created_at: string
