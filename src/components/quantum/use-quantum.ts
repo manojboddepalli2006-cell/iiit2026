@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { QuantumJob, QuantumRunResult } from "@/lib/quantum/workspace";
 import { PAPER_EXAMPLE, type QProblem } from "@/lib/quantum/credit";
-import { quantumRunsQuery, saveQuantumRun, type StoredQuantumRun } from "@/services/quantum";
+import { quantumRunsQuery, saveQuantumRun } from "@/services/quantum";
 
 export const QUANTUM_RESULT_KEY = ["quantum-result"] as const;
 export const QUANTUM_SETUP_KEY = ["quantum-setup"] as const;
@@ -20,10 +20,11 @@ export function useQuantumSetup() {
 }
 
 /** Latest quantum result: this session's run, else the newest saved run. */
-export function useLatestQuantum(): StoredQuantumRun | QuantumRunResult | undefined {
+export function useLatestQuantum(): QuantumRunResult | undefined {
   const session = useQuery<QuantumRunResult | undefined>({ queryKey: QUANTUM_RESULT_KEY, queryFn: () => undefined, enabled: false });
   const runs = useQuery(quantumRunsQuery);
-  return session.data ?? runs.data?.[0];
+  // Saved runs omit the QASM text (regenerable from the job); consumers never read it from results.
+  return session.data ?? (runs.data?.[0] as QuantumRunResult | undefined);
 }
 
 /** Runs a quantum job in a Web Worker (non-blocking), saves it and publishes it to the cache. */
