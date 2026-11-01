@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Panel, StatusPill } from "@/components/app-shell";
 import { ANALYSIS_KEY, type StoredAnalysis } from "@/components/analysis-panel";
 import { assetsQuery, portfoliosQuery } from "@/services/portfolio";
+import { analysesQuery } from "@/services/analyses";
 import { portfolioEL, totalExposure } from "@/lib/risk/engine";
 import { compactMoney, pct } from "@/lib/format";
 import chip from "@/assets/quantum-chip.jpg";
@@ -30,21 +31,23 @@ function Index() {
   const list = assets.data ?? [];
   const exp = totalExposure(list);
   const el = portfolioEL(list);
-  const a = analysis.data?.portfolioId === pid ? analysis.data : undefined;
+  const history = useQuery(analysesQuery);
+  const a = analysis.data?.portfolioId === pid ? analysis.data : history.data?.find((h) => h.portfolioId === pid);
+  const stamp = a ? ` · ${a.samples.toLocaleString()} samples · ${new Date(a.createdAt).toLocaleString()}` : "";
   const loading = portfolios.isLoading || assets.isLoading;
 
   const kpis = [
     { label: "Total Portfolio Exposure", value: compactMoney(exp), note: `${list.length} assets`, icon: Banknote },
     { label: "Expected Loss (EL)", value: compactMoney(el), note: exp ? `${pct(el / exp)} of exposure` : "—", icon: TrendingDown },
-    { label: "Value at Risk (VaR)", value: a ? compactMoney(a.var) : "Not computed", note: a ? `${(a.confidence * 100).toFixed(1)}% · Monte Carlo` : "Run an analysis", icon: Gauge },
-    { label: "Economic Capital (ECR)", value: a ? compactMoney(a.ecr) : "Not computed", note: a ? "VaR − EL" : "Run an analysis", icon: ShieldAlert },
+    { label: "Value at Risk (VaR)", value: a ? compactMoney(a.var) : "Not computed", note: a ? `${(a.confidence * 100).toFixed(1)}% · Monte Carlo${stamp}` : "Run an analysis", icon: Gauge },
+    { label: "Economic Capital (ECR)", value: a ? compactMoney(a.ecr) : "Not computed", note: a ? `VaR − E[L] · synthetic demo result` : "Run an analysis", icon: ShieldAlert },
   ];
 
   return (
     <div className="space-y-6">
       <section className="grid items-center gap-6 overflow-hidden rounded-3xl border bg-hero p-6 shadow-soft md:grid-cols-2 md:p-10">
         <div>
-          <StatusPill tone="pending">Stage 1 · Research prototype</StatusPill>
+          <StatusPill tone="pending">Stage 2 · Classical Monte Carlo engine</StatusPill>
           <h1 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">Quantum-Enhanced Credit Risk Analysis</h1>
           <p className="mt-4 max-w-lg text-muted-foreground">
             Analyze portfolio credit risk using classical Monte Carlo simulation and quantum amplitude estimation.
