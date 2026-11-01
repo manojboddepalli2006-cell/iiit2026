@@ -15,6 +15,13 @@
       "when": 1793547270603,
       "tag": "0001_create_analyses",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793548168758,
+      "tag": "0002_create_quantum_runs",
+      "breakpoints": true
     }
   ]
 }
