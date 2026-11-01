@@ -39,9 +39,9 @@ export function runMonteCarlo(
     const z = opts.model === "gaussian" ? gaussian(rand) : 0;
     let L = 0;
     for (let k = 0; k < assets.length; k++) {
-      const a = assets[k];
+      const a = assets[k]!;
       const p = opts.model === "gaussian" ? conditionalPD(a.pd, a.rho, z) : a.pd;
-      if (rand() < p) L += lam[k];
+      if (rand() < p) L += lam[k]!;
     }
     losses[s] = L;
   }
@@ -50,11 +50,11 @@ export function runMonteCarlo(
   const mean = sum / n;
   const sorted = Array.from(losses).sort((x, y) => x - y);
   const idx = Math.min(n - 1, Math.ceil(opts.confidence * n) - 1);
-  const v = sorted[Math.max(0, idx)];
+  const v = sorted[Math.max(0, idx)]!;
   const bins = 40;
-  const max = sorted[n - 1] || 1;
+  const max = sorted[n - 1]! || 1;
   const width = max / bins;
   const hist = Array.from({ length: bins }, (_, i) => ({ loss: Math.round((i + 0.5) * width), count: 0 }));
-  for (const l of sorted) hist[Math.min(bins - 1, Math.floor(l / width))].count++;
+  for (const l of sorted) hist[Math.min(bins - 1, Math.floor(l / width))]!.count++;
   return { samples: n, expectedLoss: mean, var: v, ecr: v - mean, confidence: opts.confidence, histogram: hist };
 }

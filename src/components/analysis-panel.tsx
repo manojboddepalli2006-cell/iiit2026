@@ -31,10 +31,10 @@ export function AnalysisPanel({
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<StoredAnalysis | undefined>(() => qc.getQueryData<StoredAnalysis>(ANALYSIS_KEY));
 
-  const run = () => {
-    if (!assets.length) return toast.error("Portfolio has no assets to analyse");
-    if (cfg.algorithm === "quantum") return toast.info("Quantum amplitude estimation is planned for Stage 3");
-    if (!(cfg.samples >= 1000 && cfg.samples <= 200000)) return toast.error("Sample count must be between 1,000 and 200,000");
+  const run = (): void => {
+    if (!assets.length) { toast.error("Portfolio has no assets to analyse"); return; }
+    if (cfg.algorithm === "quantum") { toast.info("Quantum amplitude estimation is planned for Stage 3"); return; }
+    if (!(cfg.samples >= 1000 && cfg.samples <= 200000)) { toast.error("Sample count must be between 1,000 and 200,000"); return; }
     setRunning(true);
     setTimeout(() => {
       const r = { ...runMonteCarlo(assets, cfg), model: cfg.model, portfolioId };
