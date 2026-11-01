@@ -13,10 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as CudaqRouteImport } from './routes/cudaq'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as LqmRouteImport } from './routes/lqm'
+import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as QCircuitsRouteImport } from './routes/q-circuits'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -38,6 +41,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -46,6 +54,11 @@ const HistoryRoute = HistoryRouteImport.update({
 const LqmRoute = LqmRouteImport.update({
   id: '/lqm',
   path: '/lqm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MethodologyRoute = MethodologyRouteImport.update({
+  id: '/methodology',
+  path: '/methodology',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsRoute = ProjectsRouteImport.update({
@@ -58,26 +71,37 @@ const QCircuitsRoute = QCircuitsRouteImport.update({
   path: '/q-circuits',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/demo': typeof DemoRoute
   '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
+  '/methodology': typeof MethodologyRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/demo': typeof DemoRoute
   '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
+  '/methodology': typeof MethodologyRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,10 +109,13 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/cudaq': typeof CudaqRoute
   '/dashboard': typeof DashboardRoute
+  '/demo': typeof DemoRoute
   '/history': typeof HistoryRoute
   '/lqm': typeof LqmRoute
+  '/methodology': typeof MethodologyRoute
   '/projects': typeof ProjectsRoute
   '/q-circuits': typeof QCircuitsRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,30 +124,39 @@ export interface FileRouteTypes {
     | '/compare'
     | '/cudaq'
     | '/dashboard'
+    | '/demo'
     | '/history'
     | '/lqm'
+    | '/methodology'
     | '/projects'
     | '/q-circuits'
+    | '/api/public/health'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/compare'
     | '/cudaq'
     | '/dashboard'
+    | '/demo'
     | '/history'
     | '/lqm'
+    | '/methodology'
     | '/projects'
     | '/q-circuits'
+    | '/api/public/health'
   id:
     | '__root__'
     | '/'
     | '/compare'
     | '/cudaq'
     | '/dashboard'
+    | '/demo'
     | '/history'
     | '/lqm'
+    | '/methodology'
     | '/projects'
     | '/q-circuits'
+    | '/api/public/health'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -128,10 +164,13 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   CudaqRoute: typeof CudaqRoute
   DashboardRoute: typeof DashboardRoute
+  DemoRoute: typeof DemoRoute
   HistoryRoute: typeof HistoryRoute
   LqmRoute: typeof LqmRoute
+  MethodologyRoute: typeof MethodologyRoute
   ProjectsRoute: typeof ProjectsRoute
   QCircuitsRoute: typeof QCircuitsRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -164,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
@@ -176,6 +222,13 @@ declare module '@tanstack/react-router' {
       path: '/lqm'
       fullPath: '/lqm'
       preLoaderRoute: typeof LqmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/methodology': {
+      id: '/methodology'
+      path: '/methodology'
+      fullPath: '/methodology'
+      preLoaderRoute: typeof MethodologyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects': {
@@ -192,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QCircuitsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -200,10 +260,13 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   CudaqRoute: CudaqRoute,
   DashboardRoute: DashboardRoute,
+  DemoRoute: DemoRoute,
   HistoryRoute: HistoryRoute,
   LqmRoute: LqmRoute,
+  MethodologyRoute: MethodologyRoute,
   ProjectsRoute: ProjectsRoute,
   QCircuitsRoute: QCircuitsRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

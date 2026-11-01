@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Circle, FileDown, Loader2, Play, XCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -43,6 +43,7 @@ function Demo() {
   const [circ, setCirc] = useState<CircuitMetrics | null>(null);
   const [q, setQ] = useState<QuantumRunResult | null>(null);
   const [cmp, setCmp] = useState<ComparisonResult | null>(null);
+  const ref = useRef<{ mc: typeof mc; q: typeof q; cmp: typeof cmp }>({ mc: null, q: null, cmp: null });
   const set = (i: number, s: S) => setSt((p) => p.map((v, j) => (j === i ? s : v)));
   const p = PAPER_EXAMPLE;
 
@@ -52,16 +53,16 @@ function Demo() {
       if (i === 0) { if (portfolios.isError || !portfolios.data) throw new Error("Database not reachable — portfolios could not be loaded"); }
       if (i === 1) setSetup({ ...DEFAULT_SETUP, problem: PAPER_EXAMPLE });
       if (i === 2) setSetup({ problem: PAPER_EXAMPLE, alpha: ALPHA, m: M, shots: SHOTS, seed: SEED });
-      if (i === 3) { await new Promise((r) => setTimeout(r, 0)); setMc(classicalForProblem(p, { alpha: ALPHA, samples: SAMPLES, seed: SEED })); }
+      if (i === 3) { await new Promise((r) => setTimeout(r, 0)); ref.current.mc = classicalForProblem(p, { alpha: ALPHA, samples: SAMPLES, seed: SEED }); setMc(ref.current.mc); }
       if (i === 4) setCirc(metrics(buildQae(p, exactVaR(p, ALPHA), M).circuit));
-      if (i === 5) { const r = await runner.run({ problem: p, alpha: ALPHA, cfg: { m: M, shots: SHOTS, seed: SEED } }); if (!r) throw new Error("Simulator did not finish"); setQ(r); }
-      if (i >= 6 && i <= 8 && !q) throw new Error("Run step 6 (QAE) first");
-      if (i === 9) { if (!mc || !q) throw new Error("Run steps 4 and 6 first"); setCmp(compare(p, ALPHA, mc, q, "comparative")); }
-      if (i === 10) { if (!cmp) throw new Error("Run step 10 first"); await exportFullReport(cmp); }
-      set(i, "done");
-    } catch (e) { set(i, "error"); toast.error((e as Error).message); }
+      if (i === 5) { const r = await runner.run({ problem: p, alpha: ALPHA, cfg: { m: M, shots: SHOTS, seed: SEED } }); if (!r) throw new Error("Simulator did not finish"); ref.current.q = r; setQ(r); }
+      if (i >= 6 && i <= 8 && !ref.current.q) throw new Error("Run step 6 (QAE) first");
+      if (i === 9) { const { mc: m, q: qq } = ref.current; if (!m || !qq) throw new Error("Run steps 4 and 6 first"); ref.current.cmp = compare(p, ALPHA, m, qq, "comparative"); setCmp(ref.current.cmp); }
+      if (i === 10) { if (!ref.current.cmp) throw new Error("Run step 10 first"); await exportFullReport(ref.current.cmp); }
+      set(i, "done"); return true;
+    } catch (e) { set(i, "error"); toast.error((e as Error).message); return false; }
   };
-  const runAll = async () => { for (let i = 0; i < 11; i++) { await step(i); } };
+  const runAll = async () => { for (let i = 0; i < 11; i++) { if (!(await step(i))) break; } };
 
   const ex = exactCdf(p);
   const steps: { t: string; body: ReactNode }[] = [
