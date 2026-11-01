@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="bg-background">
+      <SidebarInset className="min-w-0 bg-background">
         <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b bg-card/80 px-4 backdrop-blur">
           <SidebarTrigger aria-label="Toggle menu" />
           <img src={logo} alt="" width={28} height={28} className="size-7 rounded-md md:hidden" />
