@@ -34,7 +34,9 @@ export function runQuantumJob(job: QuantumJob, progress: (frac: number, msg: str
 
   const cache = new Map<number, QaeResult>();
   const xs = Array.from({ length: maxLoss(p) + 1 }, (_, i) => i);
-  const sampled = xs.length <= 16 ? xs : Array.from(new Set(Array.from({ length: 16 }, (_, i) => Math.round((i * (xs.length - 1)) / 15))));
+  // Keep simulator cost bounded: every CDF point is one full QAE circuit (cost ∝ gates × 2^qubits).
+  const budget = buildQae(p, 0, cfg.m).circuit.n >= 15 ? 6 : 16;
+  const sampled = xs.length <= budget ? xs : Array.from(new Set(Array.from({ length: budget }, (_, i) => Math.round((i * (xs.length - 1)) / (budget - 1)))));
   sampled.forEach((x, i) => {
     progress(0.05 + 0.6 * (i / sampled.length), `QAE for CDF(${x})`);
     if (!cache.has(x)) cache.set(x, runQae(p, x, cfg));
@@ -44,14 +46,14 @@ export function runQuantumJob(job: QuantumJob, progress: (frac: number, msg: str
 
   progress(0.8, "QAE convergence over evaluation qubits");
   const convergence = [];
-  for (let m = 2; m <= Math.max(2, cfg.m); m++) {
+  for (let m = Math.max(2, cfg.m - 3); m <= Math.max(2, cfg.m); m++) {
     const r = m === cfg.m ? cache.get(v.var)! : runQae(p, v.var, { ...cfg, m });
     convergence.push({ m, estimate: r.estimate, epsilon: r.epsilon, exact: exact[v.var]! });
   }
 
   progress(0.92, "Resource metrics and QASM export");
-  const atVar = runQae(p, v.var, cfg, true);
   const qaeCirc = buildQae(p, v.var, cfg.m);
+  const atVar = { ...cache.get(v.var)!, metrics: metrics(qaeCirc.circuit) };
   const el = expectedLossUnits(p);
   const exVar = exactVaR(p, alpha);
   const result: QuantumRunResult = {

@@ -20,14 +20,9 @@ export class StateVector {
     const c = g.name === "ry" ? Math.cos(g.param! / 2) : 0, s = g.name === "ry" ? Math.sin(g.param! / 2) : 0;
     const pc = g.name === "p" ? Math.cos(g.param!) : 0, ps = g.name === "p" ? Math.sin(g.param!) : 0;
     const r2 = Math.SQRT1_2;
-    // Enumerate only basis states with controls = 1 and target = 0 (2^(n−1−k) of them).
-    const fixed = cmask | t;
-    const free: number[] = [];
-    for (let b = 0; b < this.n; b++) if (!((fixed >> b) & 1)) free.push(1 << b);
-    const count = N >> (g.controls.length + 1);
-    for (let r = 0; r < count; r++) {
-      let i = cmask;
-      for (let b = 0, v = r; v; b++, v >>= 1) if (v & 1) i |= free[b]!;
+    const skip = cmask | t;
+    for (let i = 0; i < N; i++) {
+      if ((i & skip) !== cmask) continue;
       const j = i | t;
       const ar = re[i]!, ai = im[i]!, br = re[j]!, bi = im[j]!;
       switch (g.name) {
